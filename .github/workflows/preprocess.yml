@@ -1,0 +1,24 @@
+name: Credit Default Preprocessing
+on:
+  push:
+    paths:
+      - "credit_default_raw.csv"
+      - "preprocessing/**"
+      - ".github/workflows/preprocess.yml"
+  workflow_dispatch:
+jobs:
+  preprocess:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.7"
+      - name: Install dependencies
+        run: pip install pandas
+      - name: Clean dataset
+        run: python preprocessing/automate_Yahya_Putra_Pradana.py --input credit_default_raw.csv --output preprocessing/credit_default_preprocessed.csv
+      - uses: actions/upload-artifact@v4
+        with:
+          name: credit-default-preprocessed
+          path: preprocessing/credit_default_preprocessed.csv
